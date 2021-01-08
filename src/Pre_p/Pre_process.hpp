@@ -59,7 +59,8 @@ std::string __expand_macro(const std::string &_str) {
         }
     }
     if (in_macro_state) {
-        std::cout << "(Ami005) Preprocesser error: unclosed macro" << "\n";
+        std::cout << "(Ami005) Preprocesser error: unclosed macro: " << now_macro << "\n";
+        throw(1);
     }
     return ret;
 }
