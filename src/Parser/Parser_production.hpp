@@ -118,7 +118,10 @@ public:
 class para_node : public tree_node {
 public:
     para_node() : tree_node(Para) { }
-    double value() { return 0; } // 语义错误才会调用这个
+    double value() { 
+        std::cout << "(Ami100) Inner error\n";
+        throw(1);
+    } // 语义错误才会调用这个
     std::vector<double> para_list() {
         if (this->childs.empty()) return { };
         std::vector<double> ret;
@@ -134,10 +137,10 @@ public:
 
 class factor_node : public tree_node {
 private:
-    double(*func)(std::vector<double>) = 0;
+    double(*func)(const std::vector<double>&) = 0;
 public: 
     factor_node() : tree_node(Factor) { }
-    factor_node(double(*_func)(std::vector<double>)) 
+    factor_node(double(*_func)(const std::vector<double>&)) 
         : tree_node(Factor), func(_func) { }
     double value() {
         if (func == 0) return childs.front()->value();

@@ -7,7 +7,7 @@ double calcu_tree_value(tree_node* root) {
     try {
         return root->value();
     } catch (...) {
-        std::cout << "Math error.\n";
+        std::cout << "(Ami003) Math error.\n";
         return nan(0);
     }
 }

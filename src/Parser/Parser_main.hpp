@@ -36,7 +36,7 @@ Parser::Parser(Lexical_analyzer* _lex) : lexical(_lex) {
 }
 
 void Parser::error_handle() {
-    std::cout << "Syntax Error:";
+    std::cout << "(Ami002) Syntax Error:";
     lexical->loca_error();
     current_token->printToken();
     std::cout << "\n";

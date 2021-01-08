@@ -1,12 +1,16 @@
 # pragma once
+# include "Pre_p/Pre_process.hpp"
 # include "Tree_Process/Tree_Process_main.hpp"
 
 AMIC_NAMESPACE_START
 
 double etod(const std::string& _expr) {
-    AmiCal::Lexical_analyzer le_ana(_expr);
     switch (1) {
     case 1:
+        std::string after_pp;
+        try { after_pp = AmiCal::pre_process(_expr); } 
+        catch (...) { break; }
+        AmiCal::Lexical_analyzer le_ana(after_pp);
         if (!le_ana.pre_process()) break;
         AmiCal::Parser par_test(&le_ana);
         AmiCal::tree_node* target_tree;

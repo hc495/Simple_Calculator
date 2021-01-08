@@ -70,7 +70,7 @@ token::token* Lexical_analyzer::get_next_token() {
 void Lexical_analyzer::error_handle() { // 恐慌模式错误恢复
     std::string _wrong_str = std::string(&origin_string[begin_loca], &origin_string[next_loca]);
     this->new_segment();
-    std::cout << "Lexical error: ";
+    std::cout << "(Ami001) Lexical error: ";
     this->loca_error();
     std::cout << "String:" << _wrong_str << "\n";
     next_loca++;

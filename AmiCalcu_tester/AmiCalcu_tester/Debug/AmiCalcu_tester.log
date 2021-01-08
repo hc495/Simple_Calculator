@@ -1,0 +1,11 @@
+﻿  Lexical_main.cpp
+C:\Users\Zhao Yufeng\Documents\VSCode\C++\AmachiCalculator\src\Lexical\Lexical_main.cpp(1,1): warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+C:\Users\Zhao Yufeng\Documents\VSCode\C++\AmachiCalculator\src\Lexical\Lexical_main.h(1,1): warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+  Parser_main.cpp
+C:\Users\Zhao Yufeng\Documents\VSCode\C++\AmachiCalculator\src\Parser\Parser_main.h(1,1): warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+C:\Users\Zhao Yufeng\Documents\VSCode\C++\AmachiCalculator\src\Lexical\Lexical_main.h(1,1): warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+  Parser_test.cpp
+C:\Users\Zhao Yufeng\Documents\VSCode\C++\AmachiCalculator\src\Parser\Parser_main.h(1,1): warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+C:\Users\Zhao Yufeng\Documents\VSCode\C++\AmachiCalculator\src\Lexical\Lexical_main.h(1,1): warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+  正在生成代码...
+  AmiCalcu_tester.vcxproj -> C:\Users\Zhao Yufeng\Documents\VSCode\C++\AmachiCalculator\AmiCalcu_tester\Debug\AmiCalcu_tester.exe
