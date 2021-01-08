@@ -47,7 +47,7 @@ std::string __expand_macro(const std::string &_str) {
             if (_str[i] == '$') {
                 in_macro_state = false;
                 if (!is_in_macro_table(now_macro)) {
-                    std::cout << "(Ami004) Preprocesser error: undefined marco: " << now_macro << "\n";
+                    std::cout << "(Ami004) Preprocesser error: undefined macro: " << now_macro << "\n";
                     throw(1);
                 }
                 std::string transformed_string = get_expand(now_macro);
