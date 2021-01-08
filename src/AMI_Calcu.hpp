@@ -19,4 +19,10 @@ double etod(const std::string& _expr) {
     return nan;
 }
 
+int etoi(const std::string& _expr) {
+    double pre_res = etod(_expr);
+    if (isnan(pre_res)) return 0;
+    else return static_cast<int>(pre_res);
+}
+
 AMIC_NAMESPACE_END
