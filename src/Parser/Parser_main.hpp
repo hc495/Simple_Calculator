@@ -10,7 +10,7 @@ public:
 private:
     Lexical_analyzer* lexical;
     token::token* current_token;
-    void error_handle(); // 出错随便抛个啥都行
+    void error_handle();
     void delete_null_edge(tree_node* rt);
     
     std::stack<tree_node*> all_node;

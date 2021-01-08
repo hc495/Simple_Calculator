@@ -1,105 +1,105 @@
 # AMI_Calculator
 
-��֧���Զ��庯���ļ򵥼��������Ǳ���ԭ��С��ϰ��
+是支持自定义函数的简单计算器，是编译原理小练习。
 
-# 1 ����
+# 1 功能
 
-## 1.1 ����
+## 1.1 包含
 
-��C++�а���`src/AMI_Calcu.hpp`����
+在C++中包含`src/AMI_Calcu.hpp`即可
 
-������������ݾ��������ռ�`AmiCal`�¡�
+本库的所有内容均在命名空间`AmiCal`下。
 
-## 1.2 ��Ҫ�ӿ�
+## 1.2 主要接口
 
-|�ӿ�|����|
+|接口|功能|
 |:---:|:---:|
-|`double etod(const std::string& _expr)`|��`_expr`�еı���ʽ����Ϊ˫����ʵ��|
-|`int etoi(const std::string& _expr)`|��`_expr`�еı���ʽ����Ϊ32Ϊ����|
+|`double etod(const std::string& _expr)`|将`_expr`中的表达式计算为双精度实数|
+|`int etoi(const std::string& _expr)`|将`_expr`中的表达式计算为32为整数|
 
-## 1.3 ����ʽ
+## 1.3 表达式
 
-### 1.3.1 ����
+### 1.3.1 常数
 
-�����ǿɱ����ܵĳ���ֵ���ͣ�
+以下是可被接受的常数值类型：
 
-1. ʮ��������������`123`, `114514`
-2. `ʮ��������.ʮ��������`������`123.456`, `0.123`
-3. `.ʮ��������`������`.123`
+1. 十进制数串，形如`123`, `114514`
+2. `十进制数串.十进制数串`，形如`123.456`, `0.123`
+3. `.十进制数串`，形如`.123`
 
-### 1.3.2 ���
+### 1.3.2 算符
 
-�����ǿɱ����ܵ���������ͣ�
+以下是可被接受的运算符类型：
 
 `+`, `-`, `*`, `/`, `\`, `%`, `(`, `)`, `,`
 
-### 1.3.3 ����
+### 1.3.3 函数
 
-`AMI_Calculator`��������Ϊ����`ID(Para1, Para2, ..)`����ʽ������֧����������
+`AMI_Calculator`函数定义为形如`ID(Para1, Para2, ..)`的形式，参数支持任意多个。
 
-#### 1.3.3.1 Ԥ������
+#### 1.3.3.1 预定函数
 
-`AMI_Calculator`�ṩ����Ԥ������
+`AMI_Calculator`提供以下预定函数
 
-|����|�﷨|����|ʾ��|
+|函数|语法|功能|示例|
 |:---:|:---:|:---:|:---:|
-|`sin`|`sin(double)`|���ز����Ļ���-����ֵ|`sin(3)`|
-|`cos`|`cos(double)`|���ز����Ļ���-����ֵ|`cos(2)`|
-|`pow`/`power`|`pow(double, double)`|���ص�һ�����ĵڶ���������|`pow(2,2)`|
+|`sin`|`sin(double)`|返回参数的弧度-正弦值|`sin(3)`|
+|`cos`|`cos(double)`|返回参数的弧度-余弦值|`cos(2)`|
+|`pow`/`power`|`pow(double, double)`|返回第一参数的第二参数次幂|`pow(2,2)`|
 
-Ԥ�������ڵ���ʱ��ִ�������飬����������붨�岻ƥ�䣬�᷵��һ��������ߴ���
+预定函数在调用时会执行语义检查，如参数个数与定义不匹配，会返回一个警告或者错误。
 
-#### 1.3.3.2 �Զ��庯��
+#### 1.3.3.2 自定义函数
 
-�����ʹ�ýӿ�`insert_function(str, function)`����һ��`std::string`��һ��`double(*)(const vector<double>&)`���������ڰ�֮��`AMI_Calculator`����ʶ������Զ��庯����
+你可以使用接口`insert_function(str, function)`来将一个`std::string`与一个`double(*)(const vector<double>&)`绑定起来。在绑定之后，`AMI_Calculator`即可识别你的自定义函数。
 
-���Զ��庯����`std::string`�����к���������ͻ�������һ�θ���Ϊ׼��
+若自定义函数的`std::string`与现有函数产生冲突，以最后一次覆盖为准。
 
-�Զ��庯�������Զ�ִ�������飬Ӧ�ں�����������ʵ�֡�
+自定义函数不会自动执行语义检查，应在函数体内自行实现。
 
-### 1.3.4 ��
+### 1.3.4 宏
 
-`AMI_Calculator`�궨��Ϊ����`$`֮����ַ���������Ԥ�����׶�չ��Ϊ�̶����ַ��������ɺ�˼��㡣
+`AMI_Calculator`宏定义为两个`$`之间的字符串。宏在预处理阶段展开为固定的字符串，后交由后端计算。
 
-#### 1.3.4.1 Ԥ����
+#### 1.3.4.1 预定宏
 
-`AMI_Calculator`�ṩ����Ԥ����
+`AMI_Calculator`提供以下预定宏
 
-|��|չ�����|
+|宏|展开结果|
 |:---:|:---:|
 |`e`|`2.718281828`|
 |`pi`|`3.14159265`|
 
-#### 1.3.4.2 �Զ����
+#### 1.3.4.2 自定义宏
 
-�����ʹ�ýӿ�`insert_macro(macro, value)`����һ��`std::string`��һ��`std::string`���������ڰ�֮��`AMI_Calculator`����ʶ����ĺꡣ`macro`�еĺ겻��Ҫ��`$`��
+你可以使用接口`insert_macro(macro, value)`来将一个`std::string`与一个`std::string`绑定起来。在绑定之后，`AMI_Calculator`即可识别你的宏。`macro`中的宏不需要加`$`。
 
-���Զ�����`std::string`�����к������ͻ�������һ�θ���Ϊ׼��
+若自定义宏的`std::string`与现有宏产生冲突，以最后一次覆盖为准。
 
-## 1.4 ������
+## 1.4 错误处理
 
-`AMI_Calculator`���м򵥵Ĵ�����������
+`AMI_Calculator`具有简单的错误处理能力。
 
-### 1.4.1 ������Ϣ
+### 1.4.1 错误信息
 
-1. `Ami001 - Lexical error`, �ʷ�����˵����Ĵ��д����Ų����ϴʷ��淶�Ĵʷ���Ԫ���ڷ����˴���֮ʱ��`AMI_Calculator`��ָ�����󴮿�ʼ��λ�úʹʷ���Ԫ�Ĵʷ�ֵ��
-2. `Ami002 - Syntax error`, �﷨����˵����Ĵ���Ȼ�ʷ���ȷ�������д����Ų������﷨�淶�Ĵʷ���Ԫ��ϡ��ڷ����˴���֮ʱ��`AMI_Calculator`��ָ������ʷ���Ԫ��ʼ��λ�úʹʷ���Ԫ�Ĵʷ�ֵ��
-3. `Ami003 - Math error`, ��������д��󡣺ܴ��������ΪΪһ�����������˴�������Ĳ�����
-4. `Ami0031 - Semantic warning`, ���徯�档��Ϊһ�����������˹���Ĳ����������ɾ�������б�ĩβ�ĳ����涨�����Ĳ������������Կ������С�
-5. `Ami0032 - Semantic error`, ���������Ϊһ�����������˹��ٵĲ�����
-6. `Ami004 - Preprocesser error: undefined marco`, Ԥ����������: δ����ꡣ��������һ��δ����ĺꡣ
-7. `Ami005 - Preprocesser error: unclosed macro`, Ԥ����������: �Ǳպϵĺ���š�������������������š�
-8. `Ami100 - Inner error`, �������������߲����㡣��������뽫�������д��`issue`�С�
+1. `Ami001 - Lexical error`, 词法错误。说明你的串中存在着不符合词法规范的词法单元。在发生此错误之时，`AMI_Calculator`会指出错误串开始的位置和词法单元的词法值。
+2. `Ami002 - Syntax error`, 语法错误。说明你的串虽然词法正确，但其中存在着不符合语法规范的词法单元组合。在发生此错误之时，`AMI_Calculator`会指出错误词法单元开始的位置和词法单元的词法值。
+3. `Ami003 - Math error`, 运算过程中错误。很大可能是因为为一个函数传入了错误个数的参数。
+4. `Ami0031 - Semantic warning`, 语义警告。你为一个函数传入了过多的参数，程序会删掉参数列表末尾的超出规定个数的参数，但程序仍可以运行。
+5. `Ami0032 - Semantic error`, 语义错误。你为一个函数传入了过少的参数。
+6. `Ami004 - Preprocesser error: undefined marco`, 预处理器错误: 未定义宏。你输入了一个未定义的宏。
+7. `Ami005 - Preprocesser error: unclosed macro`, 预处理器错误: 非闭合的宏符号。你输入了奇数个宏符号。
+8. `Ami100 - Inner error`, 这个错误的引发者不是你。看到这个请将你的输入写入`issue`中。
 
-### 1.4.2 ���󷵻�ֵ
+### 1.4.2 错误返回值
 
-һ�����������κδ������м���ӿڵķ���ֵ����ͳһΪ��
+一旦触发上述任何错误，所有计算接口的返回值都将统一为：
 
-|�ӿ�|���󷵻�ֵ|
+|接口|错误返回值|
 |:---:|:---:|
 |`etod`|`NaN`|
 |`etoi`|`0`|
 
-# 2 ʵ��
+# 2 实现
 
-## 2.1 ����
+## 2.1 过程
