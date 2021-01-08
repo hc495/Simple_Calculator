@@ -1,6 +1,35 @@
-# include "Lexical_main.h"
+# pragma once
+# include "Lexical_base.hpp"
 
 AMIC_NAMESPACE_START
+
+class Lexical_analyzer {
+public:
+    token::token* get_next_token();
+private:
+    enum DFS_state {
+        START = 0, FIRST_NUM_IN = 1, INT_WAIT_DIGIT = 2, FLT_DOT_IN = 3, FLT_WAIT_DIGIT = 4, 
+        OPERATOR_IN = 5, ID_WAIT_ALPHA = 6
+    } current_state = START;
+    std::string origin_string;
+    inline char get_next_char();
+
+    size_t next_loca = 0;
+    size_t begin_loca = 0;
+    size_t last_confirmed = 0; // ä¸Šæ¬¡ç¡®è®¤çš„å¼€å§‹ï¼Œå®šä½é”™è¯¯ç”¨
+
+    bool state_trans();
+    inline void new_segment();
+
+    std::stack<token::token*> all_token;
+    void delete_all_token();
+    void error_handle();
+public:
+    Lexical_analyzer(const std::string& _str);
+    ~Lexical_analyzer();
+    bool pre_process();
+    void loca_error();
+};
 
 Lexical_analyzer::Lexical_analyzer(const std::string& _str) : origin_string(_str) { 
     while (origin_string.back() == ' ') origin_string.pop_back();
@@ -12,9 +41,9 @@ token::token* Lexical_analyzer::get_next_token() {
         ret = new token::token(token::end);
         all_token.push(ret);
         return ret;
-    } // ¾ä×Ó½áÊø
-    while (this->state_trans()) { // Õâ¶«Î÷·µ»Øfalse±íÊ¾[begin_loca, next_loca)Ö®¼äµÄÈ«ÊÇÕıÈ·´®
-        if (current_state == OPERATOR_IN) {// Á¢¼´¹æÔ¼ÔËËã·û
+    } // å¥å­ç»“æŸ
+    while (this->state_trans()) { // è¿™ä¸œè¥¿è¿”å›falseè¡¨ç¤º[begin_loca, next_loca)ä¹‹é—´çš„å…¨æ˜¯æ­£ç¡®ä¸²
+        if (current_state == OPERATOR_IN) {// ç«‹å³è§„çº¦è¿ç®—ç¬¦
             ret = new token::operator_token(
                 std::string(&origin_string[begin_loca], &origin_string[next_loca]));
             this->new_segment();
@@ -22,7 +51,7 @@ token::token* Lexical_analyzer::get_next_token() {
             return ret;
         } 
     }
-    // ¹æÔ¼ÒÔ¼°±¨´í
+    // è§„çº¦ä»¥åŠæŠ¥é”™
     std::string accept_str(&origin_string[begin_loca], &origin_string[next_loca]);
     DFS_state accept_state = current_state;
     if (accept_state == FIRST_NUM_IN || accept_state == INT_WAIT_DIGIT) ret = new token::int_token(accept_str);
@@ -31,14 +60,14 @@ token::token* Lexical_analyzer::get_next_token() {
         if (is_function(accept_str)) ret = new token::function_token(accept_str);
         else ret = new token::error_token(accept_str, begin_loca);
     }
-    else ret = new token::error_token(accept_str, begin_loca); //ÆäËûÇé¿ö
+    else ret = new token::error_token(accept_str, begin_loca); //å…¶ä»–æƒ…å†µ
     all_token.push(ret);
     if (ret->getTokenType() == token::error) this->error_handle();
     this->new_segment();
     return ret;
 }
 
-void Lexical_analyzer::error_handle() { // ¿Ö»ÅÄ£Ê½´íÎó»Ö¸´
+void Lexical_analyzer::error_handle() { // ææ…Œæ¨¡å¼é”™è¯¯æ¢å¤
     std::string _wrong_str = std::string(&origin_string[begin_loca], &origin_string[next_loca]);
     this->new_segment();
     std::cout << "Lexical error: ";
@@ -84,7 +113,7 @@ bool Lexical_analyzer::state_trans() {
             current_state = ID_WAIT_ALPHA;
             next_loca++;
             return true;
-        } else return false; // ¿ÉÖ±½ÓÈÓÓï·¨´íÎó
+        } else return false; // å¯ç›´æ¥æ‰”è¯­æ³•é”™è¯¯
     } 
     else if (current_state == FIRST_NUM_IN) {
         if (is_digit(current)) {

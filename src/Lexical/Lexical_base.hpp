@@ -1,5 +1,5 @@
 # pragma once
-# include "../Overall.h"
+# include "../Include/Overall.h"
 
 AMIC_NAMESPACE_START
 
@@ -112,7 +112,7 @@ protected:
     std::string lexical_info;
 public:
     explicit function_token(const std::string &_str) : token(function), lexical_info(_str){ 
-        // 应该在构造之前就确定_str是否在散列中->语义问题
+        // 搴旇鍦ㄦ瀯閫犱箣鍓嶅氨纭畾_str鏄惁鍦ㄦ暎鍒椾腑->璇箟闂
         target_function = ::AmiCal::func_table.find(_str)->second;
     }
     void printToken() override {

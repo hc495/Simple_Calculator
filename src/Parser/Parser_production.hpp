@@ -1,5 +1,5 @@
 # pragma once
-# include "../Lexical/Lexical_main.h"
+# include "../Lexical/Lexical_main.hpp"
 
 AMIC_NAMESPACE_START
 
@@ -23,8 +23,8 @@ static bool in_first_set(non_end _left, token::token_type _end) {
 }
 
 static hash<non_end, set<token::token_type>> FOLLOW_set = {
-    { Root, {token::right, token::comma, token::end } },
-    { RootRight, {token::right, token::comma, token::end } },
+    { Root, { token::right, token::comma, token::end } },
+    { RootRight, { token::right, token::comma, token::end } },
     { Expr, { token::add, token::sub, token::end, token::right } },
     { Factor, { token::muitl, token::div, token::int_div, token::reme } },
     { ExprRight, { token::add, token::sub, token::end, token::right, token::comma } },
@@ -118,7 +118,7 @@ public:
 class para_node : public tree_node {
 public:
     para_node() : tree_node(Para) { }
-    double value() { return 0; } // 语义错误才会调用这个
+    double value() { return 0; } // 璇箟閿欒鎵嶄細璋冪敤杩欎釜
     std::vector<double> para_list() {
         std::vector<double> ret;
         ret.push_back(this->childs[0]->value());
@@ -149,7 +149,7 @@ private:
     double digit = 0;
     bool isDigit = false;
 public:
-    element_node() : tree_node(Element) {}
+    element_node() : tree_node(Element) { }
     element_node(double _dig) : tree_node(Element), digit(_dig), isDigit(true) { } 
     double value() {
         return isDigit ? digit : childs[0]->value();
