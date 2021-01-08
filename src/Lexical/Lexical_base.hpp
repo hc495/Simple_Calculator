@@ -14,6 +14,10 @@ public:
         if (para.size() > 1) {
             std::cout << "Semantic warning: too much parameters in function \"sin\"" << "\n";
         }
+        if (para.size() < 1) {
+            std::cout << "Semantic error: too few parameters in function \"sin\"" << "\n";
+            throw(1);
+        }
         return std::sin(para.front()); 
     }
     static inline double cos(std::vector<double> para) { return std::cos(para.front()); }

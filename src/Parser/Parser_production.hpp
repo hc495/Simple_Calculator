@@ -120,6 +120,7 @@ public:
     para_node() : tree_node(Para) { }
     double value() { return 0; } // 语义错误才会调用这个
     std::vector<double> para_list() {
+        if (this->childs.empty()) return { };
         std::vector<double> ret;
         ret.push_back(this->childs[0]->value());
         if (childs.size() == 1) return ret;

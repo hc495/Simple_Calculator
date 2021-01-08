@@ -219,10 +219,13 @@ tree_node* Parser::element() {
 tree_node* Parser::para() {
     para_node* ret = new para_node();
     all_node.push(ret);
-    tree_node* left = root();
-    tree_node* right = para1();
-    ret->childs.push_back(left);
-    ret->childs.push_back(right);
+    if (in_first_set(Root, current_token->getTokenType())) {
+        tree_node* left = root();
+        tree_node* right = para1();
+        ret->childs.push_back(left);
+        ret->childs.push_back(right);
+    } else if (in_follow_set(Para, current_token->getTokenType())) return ret;
+    else error_handle();
     return ret;
 }
 

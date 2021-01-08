@@ -10,6 +10,7 @@
 # include <deque>
 # include <vector>
 # include <stack>
+# include <cmath>
 
 # ifndef AMIC_NAMESPACE_START
 #   define AMIC_NAMESPACE_START namespace AmiCal {

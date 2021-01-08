@@ -16,7 +16,7 @@ double etod(const std::string& _expr) {
         double result = calcu_tree_value(target_tree);
         return result;
     }
-    return nan;
+    return nan(0);
 }
 
 int etoi(const std::string& _expr) {
