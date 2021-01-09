@@ -18,7 +18,7 @@ public:
         }
         if (para.size() < 1) {
             std::cout << "(Ami0032) Semantic error: too few parameters in function \"sin\"" << "\n";
-            throw(1);
+            throw(3);
         }
         return std::sin(para.front()); 
     }
@@ -26,7 +26,7 @@ public:
     static inline double power(const std::vector<double>& para) { 
         if (para.size() < 2) {
             std::cout << "(Ami0032) Semantic error: too few parameters in function \"power\"" << "\n";
-            throw(1);
+            throw(3);
         }
         return std::pow(para[0], para[1]);
     }

@@ -43,6 +43,7 @@ int get_error_code(const std::string& _expr) {
             return ec;
         }
     }
+    std::cout << "(Ami000) Complete\n";
     return 0;
 }
 

@@ -1,6 +1,6 @@
 # AMI_Calculator
 
-是支持自定义函数的简单计算器，是编译原理小练习。
+是支持自定义函数的简单计算器，是编译原理小练习。欢迎使用。
 
 # 1 功能
 
@@ -16,6 +16,10 @@
 |:---:|:---:|
 |`double etod(const std::string& _expr)`|将`_expr`中的表达式计算为双精度实数|
 |`int32_t etoi(const std::string& _expr)`|将`_expr`中的表达式计算为32位整数|
+|`float etof(const std::string& _expr)`|将`_expr`中的表达式计算为单精度实数|
+|`int get_error_code(const std::string& _expr)`|对`_expr`执行一遍运算程序，并返回其发生的首个错误之错误码。如无错误发生，返回0|
+|`void insert_function(const std::string &id, double(*f)(const std::vector<double>&))`|插入一个自定义函数，一次运行有效|
+|`void insert_macro(const std::string &macro, const std::string &value)`|插入一个自定义宏，一次运行有效|
 
 ## 1.3 表达式
 
@@ -95,14 +99,15 @@
 
 ### 1.4.1 错误信息
 
-1. `Ami001 - Lexical error`, 词法错误。说明你的串中存在着不符合词法规范的词法单元。在发生此错误之时，`AMI_Calculator`会指出错误串开始的位置和词法单元的词法值。
-2. `Ami002 - Syntax error`, 语法错误。说明你的串虽然词法正确，但其中存在着不符合语法规范的词法单元组合。在发生此错误之时，`AMI_Calculator`会指出错误词法单元开始的位置和词法单元的词法值。
-3. `Ami003 - Math error`, 运算过程中错误。很大可能是因为为一个函数传入了错误个数的参数。
-4. `Ami0031 - Semantic warning`, 语义警告。你为一个函数传入了过多的参数，程序会删掉参数列表末尾的超出规定个数的参数，但程序仍可以运行。
-5. `Ami0032 - Semantic error`, 语义错误。你为一个函数传入了过少的参数。
-6. `Ami004 - Preprocesser error: undefined macro`, 预处理器错误: 未定义宏。你输入了一个未定义的宏。
-7. `Ami005 - Preprocesser error: unclosed macro`, 预处理器错误: 非闭合的宏符号。你输入了奇数个宏符号。
-8. `Ami100 - Inner error`, 这个错误的引发者不是你。看到这个请将你的输入写入`issue`中。
+1. `Ami000 - Complete`, 返回码`0`。正确完成全部计算过程。只会在`get_error_code`过程中出现。
+2. `Ami001 - Lexical error`, 错误码`1`, 词法错误。说明你的串中存在着不符合词法规范的词法单元。在发生此错误之时，`AMI_Calculator`会指出错误串开始的位置和词法单元的词法值。
+3. `Ami002 - Syntax error`, 错误码`2`, 语法错误。说明你的串虽然词法正确，但其中存在着不符合语法规范的词法单元组合。在发生此错误之时，`AMI_Calculator`会指出错误词法单元开始的位置和词法单元的词法值。
+4. `Ami003 - Math error`, 错误码`3`, 运算过程中错误。很大可能是因为为一个函数传入了错误个数的参数。
+5. `Ami0031 - Semantic warning`, 语义警告。你为一个函数传入了过多的参数，程序会删掉参数列表末尾的超出规定个数的参数，但程序仍可以运行。
+6. `Ami0032 - Semantic error`, 错误码`3`, 语义错误。你为一个函数传入了过少的参数。
+7. `Ami004 - Preprocesser error: undefined macro`, 错误码`4`, 预处理器错误: 未定义宏。你输入了一个未定义的宏。
+8. `Ami005 - Preprocesser error: unclosed macro`, 错误码`5`, 预处理器错误: 非闭合的宏符号。你输入了奇数个宏符号。
+9. `Ami100 - Inner error`, 错误码`100`, 这个错误的引发者不是你。看到这个请将你的输入写入`issue`中。
 
 ### 1.4.2 错误返回值
 
@@ -111,6 +116,7 @@
 |接口|错误返回值|
 |:---:|:---:|
 |`etod`|`NaN`|
+|`etof`|`NaN`|
 |`etoi`|`0`|
 
 # 2 实现
@@ -137,7 +143,7 @@
 
 产生式中的终结符号大部分被表现为语法树属性，少部分直接被舍弃。语法树中的节点全是非终结符。
 
-返回一颗词法树。
+返回一颗语法树。
 
 ### 2.1.4 语法树剪枝
 
@@ -168,3 +174,17 @@
 #### 2.1.2.2 FIRST
 
 #### 2.1.2.3 FOLLOW
+
+## 3 其他
+
+### 3.1 错误提交
+
+如发生错误码为`100`的错误提示、由本库引发的C++内部异常或段错误，请将你的输入或操作序列和错误细节写入issue。
+
+不胜感激！
+
+### 3.2 作者
+
+### 3.3 开源协议
+
+本库使用MIT协议开源。协议已附加到库的根目录。
