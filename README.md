@@ -15,7 +15,7 @@
 |接口|功能|
 |:---:|:---:|
 |`double etod(const std::string& _expr)`|将`_expr`中的表达式计算为双精度实数|
-|`int etoi(const std::string& _expr)`|将`_expr`中的表达式计算为32位整数|
+|`int32_t etoi(const std::string& _expr)`|将`_expr`中的表达式计算为32位整数|
 
 ## 1.3 表达式
 

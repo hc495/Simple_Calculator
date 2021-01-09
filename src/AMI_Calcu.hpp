@@ -10,7 +10,7 @@ void insert_macro(const std::string &macro, const std::string &value);
 int get_error_code(const std::string& _expr);
 double etod(const std::string& _expr);
 float etof(const std::string& _expr);
-int etoi(const std::string& _expr);
+int32_t etoi(const std::string& _expr);
 
 };
 
@@ -76,10 +76,10 @@ float etof(const std::string& _expr) {
     else return static_cast<float>(pre_res);
 }
 
-int etoi(const std::string& _expr) {
+int32_t etoi(const std::string& _expr) {
     double pre_res = etod(_expr);
     if (isnan(pre_res)) return 0;
-    else return static_cast<int>(pre_res);
+    else return static_cast<int32_t>(pre_res);
 }
 
 };
