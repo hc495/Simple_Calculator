@@ -19,7 +19,7 @@ public:
     friend void insert_macro(const std::string &_macro, const std::string &_value);
 };
 std::unordered_map<std::string, std::string> macro_finder::macro_table = {
-    {"e", "2.718281828"}, {"pi", "3.14159265"}
+    {"e", "2.718281828"}, {"pi", "3.141592654"}
 };
 bool is_in_macro_table(const std::string &_str) {
     return macro_finder::macro_table.find(_str) != macro_finder::macro_table.end();
