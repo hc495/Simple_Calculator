@@ -33,7 +33,7 @@ public:
     friend bool is_function(const std::string &_str);
     friend double(*get_function(const std::string &_str))(const std::vector<double>&);
     friend bool is_oper_char(char c);
-    friend void insert_function(const std::string &id, double(*f)(const std::vector<double>&));
+    friend void __insert_function(const std::string &id, double(*f)(const std::vector<double>&));
 };
 hash<std::string, double(*)(const std::vector<double>&)> functions::func_table = {
     {"sin", functions::sin}, {"cos", functions::cos}, {"power", functions::power}, {"pow", functions::power}
@@ -45,7 +45,7 @@ bool is_function(const std::string &_str) {
 double(*get_function(const std::string &_str))(const std::vector<double>&) {
     return functions::func_table[_str];
 }
-void insert_function(const std::string &id, double(*f)(const std::vector<double>&)) {
+void __insert_function(const std::string &id, double(*f)(const std::vector<double>&)) {
     functions::func_table[id] = f;
 }
 
@@ -54,6 +54,7 @@ inline bool is_oper_char(char c) {
 }
 inline bool is_digit(char c) { return c >= '0' && c <= '9'; }
 inline bool is_alpha(char c) { return (c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z'); }
+
 
 namespace token {
 
@@ -127,7 +128,7 @@ protected:
 public:
     explicit function_token(const std::string &_str) : token(function), lexical_info(_str){ 
         // 应该在构造之前就确定_str是否在散列中->语义问题
-        target_function = ::AmiCal::get_function(_str);
+        target_function = ::AMIC_NAMESPACE::get_function(_str);
     }
     void printToken() override {
         token::printToken();

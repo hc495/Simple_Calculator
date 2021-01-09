@@ -74,6 +74,7 @@ void Lexical_analyzer::error_handle() { // 恐慌模式错误恢复
     this->loca_error();
     std::cout << "String:" << _wrong_str << "\n";
     next_loca++;
+    throw(1);
 }
 
 char Lexical_analyzer::get_next_char() {

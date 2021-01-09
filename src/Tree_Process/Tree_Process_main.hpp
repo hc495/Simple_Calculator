@@ -1,14 +1,15 @@
 # pragma once
-# include "../Parser/Parser_main.hpp"
+# include "../Parser/Parser_production.hpp"
 
 AMIC_NAMESPACE_START
 
-double calcu_tree_value(tree_node* root) { 
+double calcu_tree_value(T_node::tree_node* root) { 
     try {
         return root->value();
     } catch (...) {
         std::cout << "(Ami003) Math error.\n";
-        return nan(0);
+        char flag = ' ';
+        throw;
     }
 }
 

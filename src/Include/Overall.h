@@ -13,7 +13,11 @@
 # include <cmath>
 
 # ifndef AMIC_NAMESPACE_START
-#   define AMIC_NAMESPACE_START namespace AmiCal {
+#   define AMIC_NAMESPACE_START namespace __AmiCal_base {
+# endif
+
+# ifndef AMIC_NAMESPACE
+#   define AMIC_NAMESPACE __AmiCal_base
 # endif
 
 # ifndef AMIC_NAMESPACE_END

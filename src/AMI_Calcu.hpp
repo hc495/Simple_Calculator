@@ -1,26 +1,79 @@
 # pragma once
 # include "Pre_p/Pre_process.hpp"
 # include "Tree_Process/Tree_Process_main.hpp"
+# include "Parser/Parser_main.hpp"
 
-AMIC_NAMESPACE_START
+namespace AmiCal {
+
+void insert_function(const std::string &id, double(*f)(const std::vector<double>&));
+void insert_macro(const std::string &macro, const std::string &value);
+int get_error_code(const std::string& _expr);
+double etod(const std::string& _expr);
+float etof(const std::string& _expr);
+int etoi(const std::string& _expr);
+
+};
+
+
+namespace AmiCal {
+
+void insert_function(const std::string &id, double(*f)(const std::vector<double>&)) {
+    return AMIC_NAMESPACE::__insert_function(id, f);
+}
+
+void insert_macro(const std::string &macro, const std::string &value) {
+    return AMIC_NAMESPACE::__insert_macro(macro, value);
+}
+
+int get_error_code(const std::string& _expr) {
+    switch (1) {
+    case 1:
+        std::string after_pp;
+        try { 
+            after_pp = AMIC_NAMESPACE::pre_processer::pre_process(_expr); 
+            AMIC_NAMESPACE::Lexical_analyzer le_ana(after_pp);
+            if (!le_ana.pre_process()) break;
+            AMIC_NAMESPACE::Parser par_test(&le_ana);
+            AMIC_NAMESPACE::T_node::tree_node* target_tree;
+            if (!(target_tree = par_test.get_parser_tree())) {
+                break;
+            }
+            double result = AMIC_NAMESPACE::calcu_tree_value(target_tree);
+        } catch (int ec) {
+            return ec;
+        }
+    }
+    return 0;
+}
 
 double etod(const std::string& _expr) {
     switch (1) {
     case 1:
         std::string after_pp;
-        try { after_pp = AmiCal::pre_process(_expr); } 
-        catch (...) { break; }
-        AmiCal::Lexical_analyzer le_ana(after_pp);
-        if (!le_ana.pre_process()) break;
-        AmiCal::Parser par_test(&le_ana);
-        AmiCal::tree_node* target_tree;
-        if (!(target_tree = par_test.get_parser_tree())) {
+        try { 
+            after_pp = AMIC_NAMESPACE::pre_processer::pre_process(_expr); 
+            AMIC_NAMESPACE::Lexical_analyzer le_ana(after_pp);
+            if (!le_ana.pre_process()) break;
+            AMIC_NAMESPACE::Parser par_test(&le_ana);
+            AMIC_NAMESPACE::T_node::tree_node* target_tree;
+            if (!(target_tree = par_test.get_parser_tree())) {
+                break;
+            }
+            double result = AMIC_NAMESPACE::calcu_tree_value(target_tree);
+            return result;
+        } catch (...) {
             break;
         }
-        double result = calcu_tree_value(target_tree);
-        return result;
     }
-    return nan(0);
+    char flag = ' ';
+    return nan(&flag);
+}
+
+float etof(const std::string& _expr) {
+    char flag = ' ';
+    double pre_res = etod(_expr);
+    if (isnan(pre_res)) return nanf(&flag);
+    else return static_cast<float>(pre_res);
 }
 
 int etoi(const std::string& _expr) {
@@ -29,4 +82,4 @@ int etoi(const std::string& _expr) {
     else return static_cast<int>(pre_res);
 }
 
-AMIC_NAMESPACE_END
+};
