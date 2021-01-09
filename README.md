@@ -106,7 +106,7 @@
 5. `Ami0031 - Semantic warning`, 语义警告。你为一个函数传入了过多的参数，程序会删掉参数列表末尾的超出规定个数的参数，但程序仍可以运行。
 6. `Ami0032 - Semantic error`, 错误码`3`, 语义错误。你为一个函数传入了过少的参数。
 7. `Ami004 - Preprocesser error: undefined macro`, 错误码`4`, 预处理器错误: 未定义宏。你输入了一个未定义的宏。
-8. `Ami005 - Preprocesser error: unclosed macro`, 错误码`5`, 预处理器错误: 非闭合的宏符号。你输入了奇数个宏符号。
+8. `Ami005 - Preprocesser error: unclosed macro`, 错误码`5`, 预处理器错误: 非闭合的宏符号。你输入了奇数个`$`符号。
 9. `Ami100 - Inner error`, 错误码`100`, 这个错误的引发者不是你。看到这个请将你的输入写入`issue`中。
 
 ### 1.4.2 错误返回值
