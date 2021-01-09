@@ -8,7 +8,6 @@ double calcu_tree_value(T_node::tree_node* root) {
         return root->value();
     } catch (...) {
         std::cout << "(Ami003) Math error.\n";
-        char flag = ' ';
         throw;
     }
 }
