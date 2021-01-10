@@ -76,8 +76,9 @@ public:
     void set_negative() { negative = true; }
     double value() {
         double ret = childs[0]->value();
+        ret = negative ? 0 - ret : ret;
         if (childs.size() > 1) ret += childs[1]->value();
-        return negative ? 0 - ret : ret;
+        return ret;
     }
 };
 

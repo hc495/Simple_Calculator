@@ -5,8 +5,8 @@ double first(const std::vector<double> &a) {
 }
 
 int main() {
-    AmiCal::insert_function("sum", first);
+    AmiCal::insert_function("sum_22", first);
     AmiCal::insert_macro("ad", "sum");
-    std::cout << AmiCal::get_error_code("-1-1");
+    std::cout << AmiCal::etoi("-1-1+sum_22(1234)");
     return 0;
 }

@@ -22,11 +22,23 @@ public:
         }
         return std::sin(para.front()); 
     }
-    static inline double cos(const std::vector<double>& para) { return std::cos(para.front()); }
+    static inline double cos(const std::vector<double>& para) { 
+        if (para.size() > 1) {
+            std::cout << "(Ami0031) Semantic warning: too much parameters in function \"cos\"" << "\n";
+        }
+        if (para.size() < 1) {
+            std::cout << "(Ami0032) Semantic error: too few parameters in function \"cos\"" << "\n";
+            throw(3);
+        }
+        return std::cos(para.front()); 
+    }
     static inline double power(const std::vector<double>& para) { 
         if (para.size() < 2) {
             std::cout << "(Ami0032) Semantic error: too few parameters in function \"power\"" << "\n";
             throw(3);
+        }
+        if (para.size() > 2) {
+            std::cout << "(Ami0031) Semantic warning: too much parameters in function \"power\"" << "\n";
         }
         return std::pow(para[0], para[1]);
     }
@@ -53,7 +65,7 @@ inline bool is_oper_char(char c) {
     return functions::oper_char_table.find(c) != functions::oper_char_table.end(); 
 }
 inline bool is_digit(char c) { return c >= '0' && c <= '9'; }
-inline bool is_alpha(char c) { return (c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z'); }
+inline bool is_alpha(char c) { return is_digit(c) || c == '_' || (c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z'); }
 
 
 namespace token {

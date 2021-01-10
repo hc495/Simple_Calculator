@@ -110,7 +110,7 @@ bool Lexical_analyzer::state_trans() {
             current_state = OPERATOR_IN;
             next_loca++;
             return true;
-        } else if (is_alpha(current)) {
+        } else if (is_alpha(current)) { // 顺序很重要，保证数字不会被加入idtoken中
             current_state = ID_WAIT_ALPHA;
             next_loca++;
             return true;
