@@ -11,6 +11,8 @@ int get_error_code(const std::string& _expr);
 double etod(const std::string& _expr);
 float etof(const std::string& _expr);
 int32_t etoi(const std::string& _expr);
+int print_token(const std::string& _expr);
+// void print_tree(const std::string& _expr);
 
 };
 
@@ -82,5 +84,38 @@ int32_t etoi(const std::string& _expr) {
     if (isnan(pre_res)) return 0;
     else return static_cast<int32_t>(pre_res);
 }
+
+int print_token(const std::string& _expr) {
+    AMIC_NAMESPACE::Lexical_analyzer l_ana(_expr);
+    AMIC_NAMESPACE::token::token* current;
+    while (static_cast<int>((current = l_ana.get_next_token())->getTokenType()) >= 0) {
+        current->printToken();
+    }
+    return current->getTokenType() == AMIC_NAMESPACE::token::end ? 0 : 1; // complete -> 0 | error -> 1
+}
+
+/*
+
+void print_tree(const std::string& _expr) {
+    switch (1) {
+    case 1:
+        std::string after_pp;
+        try { 
+            after_pp = AMIC_NAMESPACE::pre_processer::pre_process(_expr); 
+            AMIC_NAMESPACE::Lexical_analyzer le_ana(after_pp);
+            if (!le_ana.pre_process()) break;
+            AMIC_NAMESPACE::Parser par_test(&le_ana);
+            AMIC_NAMESPACE::T_node::tree_node* target_tree;
+            if (!(target_tree = par_test.get_parser_tree())) {
+                break;
+            }
+
+        } catch (...) {
+            break;
+        }
+    }
+}
+
+*/
 
 };

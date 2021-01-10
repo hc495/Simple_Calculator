@@ -49,6 +49,7 @@ private:
     bool good_node = true;
 public:
     virtual double value() = 0;
+//    virtual void print() = 0;
     tree_node(production::non_end _nt) : node_type(_nt) { }
     std::vector<tree_node*> childs;
     production::non_end get_node_type() { return node_type; }
@@ -60,7 +61,7 @@ private:
 public:
     root_node() : tree_node(production::Root) { }
     void set_negative() { negative = true; }
-    double value() {
+    double value() override {
         double ret = childs[0]->value();
         ret = negative ? 0 - ret : ret;
         if (childs.size() > 1) ret += childs[1]->value();
@@ -74,7 +75,7 @@ private:
 public:
     rootright_node() : tree_node(production::RootRight) { }
     void set_negative() { negative = true; }
-    double value() {
+    double value() override {
         double ret = childs[0]->value();
         ret = negative ? 0 - ret : ret;
         if (childs.size() > 1) ret += childs[1]->value();
@@ -86,7 +87,7 @@ class exprright_node : public tree_node {
 public:
     char oper;
     exprright_node(char _oper) : tree_node(production::ExprRight), oper(_oper) { }
-    double value() {
+    double value() override {
         double ret = childs[0]->value();
         if (childs.size() == 1) return ret;
         char oper = static_cast<exprright_node*>(childs[1])->oper;
@@ -106,7 +107,7 @@ public:
 class expr_node : public tree_node {
 public:
     expr_node() : tree_node(production::Expr) { }
-    double value() {
+    double value() override {
         double ret = childs[0]->value();
         if (childs.size() == 1) return ret;
         char oper = static_cast<exprright_node*>(childs[1])->oper;
@@ -126,7 +127,7 @@ public:
 class para_node : public tree_node {
 public:
     para_node() : tree_node(production::Para) { }
-    double value() { 
+    double value() override { 
         std::cout << "(Ami100) Inner error\n";
         throw(100);
     } // 语义错误才会调用这个
@@ -150,7 +151,7 @@ public:
     factor_node() : tree_node(production::Factor) { }
     factor_node(double(*_func)(const std::vector<double>&)) 
         : tree_node(production::Factor), func(_func) { }
-    double value() {
+    double value() override {
         if (func == 0) return childs.front()->value();
         else return func(static_cast<para_node*>(childs[0])->para_list());
     }
@@ -163,7 +164,7 @@ private:
 public:
     element_node() : tree_node(production::Element) { }
     element_node(double _dig) : tree_node(production::Element), digit(_dig), isDigit(true) { } 
-    double value() {
+    double value() override {
         return isDigit ? digit : childs[0]->value();
     }
 };
