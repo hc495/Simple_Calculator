@@ -1,4 +1,7 @@
 # pragma once
+# ifndef __AMI_L_BASE__
+# define __AMI_L_BASE__
+
 # include "../Include/Overall.h"
 
 AMIC_NAMESPACE_START
@@ -11,6 +14,8 @@ using set = std::set<key>;
 class functions {
     static hash<std::string, double(*)(const std::vector<double>&)> func_table;
     static set<char> oper_char_table;
+    static constexpr double __Exp = 2.718281828;
+    static constexpr double __Pi = 3.141592654;
 public:
     static inline double sin(const std::vector<double>& para) { 
         if (para.size() > 1) {
@@ -42,13 +47,72 @@ public:
         }
         return std::pow(para[0], para[1]);
     }
+    static inline double cosh(const std::vector<double>& para) { 
+        if (para.size() > 1) {
+            std::cout << "(Ami0031) Semantic warning: too much parameters in function \"cosh\"" << "\n";
+        }
+        if (para.size() < 1) {
+            std::cout << "(Ami0032) Semantic error: too few parameters in function \"cosh\"" << "\n";
+            throw(3);
+        }
+        return std::cosh(para.front()); 
+    }
+    static inline double sinh(const std::vector<double>& para) { 
+        if (para.size() > 1) {
+            std::cout << "(Ami0031) Semantic warning: too much parameters in function \"sinh\"" << "\n";
+        }
+        if (para.size() < 1) {
+            std::cout << "(Ami0032) Semantic error: too few parameters in function \"sinh\"" << "\n";
+            throw(3);
+        }
+        return std::sinh(para.front()); 
+    }
+    static inline double tan(const std::vector<double>& para) { 
+        if (para.size() > 1) {
+            std::cout << "(Ami0031) Semantic warning: too much parameters in function \"tan\"" << "\n";
+        }
+        if (para.size() < 1) {
+            std::cout << "(Ami0032) Semantic error: too few parameters in function \"tan\"" << "\n";
+            throw(3);
+        }
+        return std::tan(para.front()); 
+    }
+    static inline double sum(const std::vector<double>& para) {
+        double ret = 0;
+        std::for_each(para.begin(), para.end(), [&ret](auto num) {
+            ret += num;
+        });
+        return ret;
+    }
+    static inline double exp(const std::vector<double>& para) {
+        if (para.size() > 1) std::cout << "(Ami0031) Semantic warning: too much parameters in function \"exp\"" << "\n";
+        if (para.empty()) 
+            return functions::__Exp;
+        else return functions::power( { __Exp, para.front() } );
+    }
+    static inline double ln(const std::vector<double>& para) {
+        if (para.size() > 1) {
+            std::cout << "(Ami0031) Semantic warning: too much parameters in function \"ln\"" << "\n";
+        }
+        if (para.size() < 1) {
+            std::cout << "(Ami0032) Semantic error: too few parameters in function \"ln\"" << "\n";
+            throw(3);
+        }
+        return log(para.front());
+    }
+    static inline double pi(const std::vector<double>& para) {
+        if (!para.empty()) std::cout << "(Ami0031) Semantic warning: too much parameters in function \"pi\"" << "\n";
+        return functions::__Pi;
+    }
     friend bool is_function(const std::string &_str);
     friend double(*get_function(const std::string &_str))(const std::vector<double>&);
     friend bool is_oper_char(char c);
     friend void __insert_function(const std::string &id, double(*f)(const std::vector<double>&));
 };
 hash<std::string, double(*)(const std::vector<double>&)> functions::func_table = {
-    {"sin", functions::sin}, {"cos", functions::cos}, {"power", functions::power}, {"pow", functions::power}
+    {"sin", functions::sin}, {"cos", functions::cos}, {"power", functions::power}, {"pow", functions::power}, 
+    {"tan", functions::tan}, {"cosh", functions::cosh}, {"sinh", functions::sinh}, {"sum", functions::sum}, 
+    {"exp", functions::exp}, {"ln", functions::ln}, {"pi", functions::pi}
 };
 set<char> functions::oper_char_table = {'+', '-', '*', '/', '%', '(', ')', '\\', ','};
 bool is_function(const std::string &_str) {
@@ -152,3 +216,5 @@ public:
 };//namespace token
 
 AMIC_NAMESPACE_END  
+
+# endif

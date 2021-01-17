@@ -1,4 +1,6 @@
 # pragma once
+# ifndef __AMI_OVA__
+# define __AMI_OVA__
 # include <math.h>
 # include <unordered_map>
 # include <string>
@@ -22,4 +24,6 @@
 
 # ifndef AMIC_NAMESPACE_END
 #   define AMIC_NAMESPACE_END };
+# endif
+
 # endif

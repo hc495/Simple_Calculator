@@ -14,7 +14,7 @@
 
 |接口|功能|
 |:---:|:---:|
-|`double etod(const std::string& _expr)`|将`_expr`中的表达式计算为双精度实数|
+|`double etolf(const std::string& _expr)`|将`_expr`中的表达式计算为双精度实数|
 |`int32_t etoi(const std::string& _expr)`|将`_expr`中的表达式计算为32位整数|
 |`float etof(const std::string& _expr)`|将`_expr`中的表达式计算为单精度实数|
 |`int get_error_code(const std::string& _expr)`|对`_expr`执行一遍运算程序，并返回其发生的首个错误之错误码。如无错误发生，返回0|
@@ -62,9 +62,17 @@
 |:---:|:---:|:---:|:---:|
 |`sin`|`sin(double)`|返回参数的弧度-正弦值|`sin(3)`|
 |`cos`|`cos(double)`|返回参数的弧度-余弦值|`cos(2)`|
+|`tan`|`tan(double)`|返回参数的弧度-正切值|`tan(2)`|
+|`sinh`|`sinh(double)`|返回参数的双曲正弦值|`sinh(3)`|
+|`cosh`|`cosh(double)`|返回参数的双曲余弦值|`cosh(2)`|
+|`sum`|`sum(double, ...)`|返回参数序列的和|`sum(1,2,3,4.5)`|
 |`pow`/`power`|`pow(double, double)`|返回第一参数的第二参数次幂|`pow(2,2)`|
+|`exp`|`exp()`|返回自然对数之底数值|`exp()`|
+|`exp`|`exp(double)`|返回e的参数次方|`exp(2)`|
+|`ln`|`ln(double)`|返回参数的自然对数|`ln(exp())`|
+|`pi`|`pi()`|返回圆周率之值|`pi()`|
 
-预定函数在调用时会执行语义检查，如参数个数与定义不匹配，会返回一个警告或者错误。
+预定义函数在调用时会执行语义检查，如参数个数与定义不匹配，会返回一个警告或者错误。
 
 #### 1.3.3.2 自定义函数
 
@@ -84,8 +92,8 @@
 
 |宏|展开结果|
 |:---:|:---:|
-|`e`|`2.718281828`|
-|`pi`|`3.141592654`|
+|`e`|`(2.718281828)`|
+|`pi`|`(3.141592654)`|
 
 #### 1.3.4.2 自定义宏
 
@@ -161,6 +169,18 @@
 
 ### 2.1.1 词法规约
 
+词法共有11类词法单元。
+
+词法单元有：
+
+|终结符号|意义|规则(自然语言)|
+|:---:|:---:|:---:|
+|***id***|标识符|不以数字开头的字母/数字/下划线组成的非空串|
+|***num***|整形数|C风格整形数|
+|***float***|浮点数|不支持对数描述的C风格浮点数|
+|***operator***|运算符|在运算符表里的单个符号|
+|***error***|词法错误|所有失配串|
+
 #### 2.1.1.1 正则表达式
 
 #### 2.1.1.2 DFA
@@ -169,11 +189,69 @@
 
 ### 2.1.2 语法规约
 
-#### 2.1.2.1 产生式
+`AMI_Calculator`使用LL(1)预测分析，故语法经过消左递归和消回溯处理。
 
-#### 2.1.2.2 FIRST
+#### 2.1.2.1 终结符号集合
 
-#### 2.1.2.3 FOLLOW
+文法共有11类终结符号，部分对应4种词法单元。
+
+终结符号有：
+
+|终结符号|意义|对应的词法单元|
+|:---:|:---:|:---:|
+|***function***|函数签名|(在符号表中的) ***id***|
+|***digit***|数字|***num*** \| ***float***|
+|***ε***|空串|---|
+|***+***|加号|***operator*** && `tokentype == '+'`|
+|***-***|负号|***operator*** && `tokentype == '-'`|
+|***\****|乘号|***operator*** && `tokentype == '*'`|
+|***/***|除号|***operator*** && `tokentype == '/'`|
+|***\\***|整除|***operator*** && `tokentype == '\\'`|
+|***%***|求余|***operator*** && `tokentype == '%'`|
+|***(***|左括号|***operator*** && `tokentype == '('`|
+|***)***|右括号|***operator*** && `tokentype == ')'`|
+|***,***|分隔符|***operator*** && `tokentype == ','`|
+
+#### 2.1.2.2 产生式
+
+文法经过LL(1)处理后，共有8种非终结符号。
+
+非终结符号有：
+
+|终结符号|意义|
+|:---:|:---:|:---:|
+|*Root*|最高级表达式，开始符号|
+|*RootRight*|*Root*消左递归形成的右部重复部分|
+|*Expr*|加减法因子|
+|*ExprRight*|*Expr*消左递归形成的右部重复部分|
+|*Factor*|乘除法因子|
+|*Element*|乘除法因子中不可再分的部分|
+|*Para*|参数包|
+|*Para'*|*Para*消左递归形成的右部重复部分|
+
+所有非终结符号的产生式如下：
+
+$$Root\rArr Expr_1 · RootRight\  | \boldsymbol{-} Expr · RootRight$$
+$$RootRight\rArr \boldsymbol{+} Expr · RootRight\ | \boldsymbol{-} Expr · RootRight\ |\boldsymbol{\epsilon}$$  
+
+$$Expr\rArr Factor · ExprRight$$
+$$ExprRight\rArr \boldsymbol{*} Factor · ExprRight\ | \boldsymbol{/} Factor · RootRight\ $$
+$$ExprRight\rArr \boldsymbol{\setminus} Factor · RootRight\ | \boldsymbol{\%} Factor · RootRight\ |\boldsymbol{\epsilon}$$
+
+$$Factor\rArr Element\ | \boldsymbol{function(}para\boldsymbol{)}$$
+
+$$Element\rArr \boldsymbol{(}root\boldsymbol{)} | \boldsymbol{digit}$$
+
+$$Para\rArr Root · Para' | \boldsymbol{\epsilon}$$
+$$Para'\rArr \boldsymbol{,}Root · Para' | \boldsymbol{\epsilon}$$
+
+上述文法不含左递归，单产生式各个选项的**FIRST**集合不相交，且具有**ε**产生式的非终结符号的**FIRST**与**FOLLOW**集合不相交，因此适用LL(1)预测分析技术。
+
+#### 2.1.2.3 FIRST
+
+
+
+#### 2.1.2.4 FOLLOW
 
 # 3 其他
 

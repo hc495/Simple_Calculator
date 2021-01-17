@@ -1,4 +1,7 @@
 # pragma once
+# ifndef __AMI_PM__
+# define __AMI_PM__
+
 # include "../Lexical/Lexical_main.hpp"
 # include "Parser_production.hpp"
 
@@ -247,3 +250,5 @@ T_node::tree_node* Parser::para1() {
 }
 
 AMIC_NAMESPACE_END
+
+# endif

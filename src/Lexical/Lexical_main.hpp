@@ -1,4 +1,7 @@
 # pragma once
+# ifndef __AMI_LM__
+# define __AMI_LM__
+
 # include "Lexical_base.hpp"
 
 AMIC_NAMESPACE_START
@@ -198,3 +201,5 @@ void Lexical_analyzer::loca_error() {
 }
 
 AMIC_NAMESPACE_END
+
+# endif

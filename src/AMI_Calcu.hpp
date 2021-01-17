@@ -1,4 +1,7 @@
 # pragma once
+# ifndef __AMI_CALCU__
+# define __AMI_CALCU__
+
 # include "Pre_p/Pre_process.hpp"
 # include "Tree_Process/Tree_Process_main.hpp"
 # include "Parser/Parser_main.hpp"
@@ -8,11 +11,10 @@ namespace AmiCal {
 void insert_function(const std::string &id, double(*f)(const std::vector<double>&));
 void insert_macro(const std::string &macro, const std::string &value);
 int get_error_code(const std::string& _expr);
-double etod(const std::string& _expr);
+double etolf(const std::string& _expr);
 float etof(const std::string& _expr);
 int32_t etoi(const std::string& _expr);
 int print_token(const std::string& _expr);
-// void print_tree(const std::string& _expr);
 
 };
 
@@ -49,7 +51,7 @@ int get_error_code(const std::string& _expr) {
     return 0;
 }
 
-double etod(const std::string& _expr) {
+double etolf(const std::string& _expr) {
     switch (1) {
     case 1:
         std::string after_pp;
@@ -74,13 +76,13 @@ double etod(const std::string& _expr) {
 
 float etof(const std::string& _expr) {
     char flag = ' ';
-    double pre_res = etod(_expr);
+    double pre_res = etolf(_expr);
     if (isnan(pre_res)) return nanf(&flag);
     else return static_cast<float>(pre_res);
 }
 
 int32_t etoi(const std::string& _expr) {
-    double pre_res = etod(_expr);
+    double pre_res = etolf(_expr);
     if (isnan(pre_res)) return 0;
     else return static_cast<int32_t>(pre_res);
 }
@@ -94,28 +96,6 @@ int print_token(const std::string& _expr) {
     return current->getTokenType() == AMIC_NAMESPACE::token::end ? 0 : 1; // complete -> 0 | error -> 1
 }
 
-/*
-
-void print_tree(const std::string& _expr) {
-    switch (1) {
-    case 1:
-        std::string after_pp;
-        try { 
-            after_pp = AMIC_NAMESPACE::pre_processer::pre_process(_expr); 
-            AMIC_NAMESPACE::Lexical_analyzer le_ana(after_pp);
-            if (!le_ana.pre_process()) break;
-            AMIC_NAMESPACE::Parser par_test(&le_ana);
-            AMIC_NAMESPACE::T_node::tree_node* target_tree;
-            if (!(target_tree = par_test.get_parser_tree())) {
-                break;
-            }
-
-        } catch (...) {
-            break;
-        }
-    }
-}
-
-*/
-
 };
+
+# endif

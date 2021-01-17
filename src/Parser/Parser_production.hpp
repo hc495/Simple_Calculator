@@ -1,4 +1,7 @@
 # pragma once
+# ifndef __AMI_PP__
+# define __AMI_PP__
+
 # include "../Lexical/Lexical_main.hpp"
 
 AMIC_NAMESPACE_START
@@ -172,3 +175,5 @@ public:
 };
 
 AMIC_NAMESPACE_END
+
+# endif
