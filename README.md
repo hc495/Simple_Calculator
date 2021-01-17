@@ -231,7 +231,7 @@
 
 所有非终结符号的产生式如下：
 
-$$Root\rArr Expr_1 · RootRight\  | \boldsymbol{-} Expr · RootRight$$
+$$Root\rArr Expr · RootRight\  | \boldsymbol{-} Expr · RootRight$$
 $$RootRight\rArr \boldsymbol{+} Expr · RootRight\ | \boldsymbol{-} Expr · RootRight\ |\boldsymbol{\epsilon}$$  
 
 $$Expr\rArr Factor · ExprRight$$
