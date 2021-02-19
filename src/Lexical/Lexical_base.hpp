@@ -23,7 +23,7 @@ public:
         }
         if (para.size() < 1) {
             std::cout << "(Ami0032) Semantic error: too few parameters in function \"sin\"" << "\n";
-            throw(3);
+            throw para.size();
         }
         return std::sin(para.front()); 
     }
@@ -33,14 +33,14 @@ public:
         }
         if (para.size() < 1) {
             std::cout << "(Ami0032) Semantic error: too few parameters in function \"cos\"" << "\n";
-            throw(3);
+            throw para.size();
         }
         return std::cos(para.front()); 
     }
     static inline double power(const std::vector<double>& para) { 
         if (para.size() < 2) {
             std::cout << "(Ami0032) Semantic error: too few parameters in function \"power\"" << "\n";
-            throw(3);
+            throw para.size();
         }
         if (para.size() > 2) {
             std::cout << "(Ami0031) Semantic warning: too much parameters in function \"power\"" << "\n";
@@ -53,7 +53,7 @@ public:
         }
         if (para.size() < 1) {
             std::cout << "(Ami0032) Semantic error: too few parameters in function \"cosh\"" << "\n";
-            throw(3);
+            throw para.size();
         }
         return std::cosh(para.front()); 
     }
@@ -63,7 +63,7 @@ public:
         }
         if (para.size() < 1) {
             std::cout << "(Ami0032) Semantic error: too few parameters in function \"sinh\"" << "\n";
-            throw(3);
+            throw para.size();
         }
         return std::sinh(para.front()); 
     }
@@ -73,7 +73,7 @@ public:
         }
         if (para.size() < 1) {
             std::cout << "(Ami0032) Semantic error: too few parameters in function \"tan\"" << "\n";
-            throw(3);
+            throw para.size();
         }
         return std::tan(para.front()); 
     }
@@ -96,7 +96,7 @@ public:
         }
         if (para.size() < 1) {
             std::cout << "(Ami0032) Semantic error: too few parameters in function \"ln\"" << "\n";
-            throw(3);
+            throw para.size();
         }
         return log(para.front());
     }
@@ -163,14 +163,14 @@ public:
 
 class int_token : public token {
 protected:
-    int lexical_info;
+    long long int lexical_info;
 public:
-    explicit int_token(const std::string &_str) : token(inter), lexical_info(std::stoi(_str)) { }
+    explicit int_token(const std::string &_str) : token(inter), lexical_info(std::stoll(_str)) { }
     void printToken() override {
         token::printToken();
         std::cout << "lexical info: " << lexical_info << "\n";
     }
-    int value() { return lexical_info; }
+    long long int value() { return lexical_info; }
 };
 
 class float_token : public token {

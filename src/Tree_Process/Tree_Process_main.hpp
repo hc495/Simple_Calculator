@@ -9,9 +9,9 @@ AMIC_NAMESPACE_START
 double calcu_tree_value(T_node::tree_node* root) { 
     try {
         return root->value();
-    } catch (...) {
+    } catch (const AMICAL_ERROR& err) {
         std::cout << "(Ami003) Math error.\n";
-        throw;
+        throw AMICAL_ERROR(err);
     }
 }
 

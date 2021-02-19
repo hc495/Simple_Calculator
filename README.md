@@ -84,7 +84,7 @@
 
 ### 1.3.4 宏
 
-`AMI_Calculator`宏定义为两个`$`之间的字符串。宏在预处理阶段展开为固定的字符串，后交由后端计算。
+`AMI_Calculator`宏定义为两个`#`之间的字符串。宏在预处理阶段展开为固定的字符串，后交由后端计算。
 
 #### 1.3.4.1 预定义宏
 
@@ -97,7 +97,7 @@
 
 #### 1.3.4.2 自定义宏
 
-你可以使用接口`insert_macro(macro, value)`来将一个`std::string`与一个`std::string`绑定起来。在绑定之后，`AMI_Calculator`即可识别你的宏。`macro`中的宏不需要加`$`。
+你可以使用接口`insert_macro(macro, value)`来将一个`std::string`与一个`std::string`绑定起来。在绑定之后，`AMI_Calculator`即可识别你的宏。`macro`中的宏不需要加`#`。
 
 若自定义宏的`std::string`与现有宏产生冲突，以最后一次覆盖为准。
 

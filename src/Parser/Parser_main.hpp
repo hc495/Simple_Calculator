@@ -29,7 +29,7 @@ private:
     T_node::tree_node* para();
     T_node::tree_node* para1();
 public:
-    Parser(Lexical_analyzer* _lex);
+    explicit Parser(Lexical_analyzer* _lex);
     ~Parser();
 };
 
@@ -40,10 +40,10 @@ Parser::Parser(Lexical_analyzer* _lex) : lexical(_lex) {
 
 void Parser::error_handle() {
     std::cout << "(Ami002) Syntax Error:";
-    lexical->loca_error();
+    unsigned int errloca = lexical->loca_error();
     current_token->printToken();
     std::cout << "\n";
-    throw (2);
+    throw AMICAL_ERROR(2, errloca);
 }
 
 void Parser::delete_null_edge(T_node::tree_node* rt) {
@@ -68,7 +68,6 @@ T_node::tree_node* Parser::get_parser_tree() {
         ret = root();
         delete_null_edge(ret);
     } catch (...) {
-        ret = 0;
         throw;
     }
     return ret;
@@ -185,7 +184,10 @@ T_node::tree_node* Parser::factor() {
         T_node::tree_node* elem = element();
         ret->childs.push_back(elem);
     } else if (current_token->getTokenType() == token::function) {
-        ret = new T_node::factor_node(static_cast<token::function_token*>(current_token)->value());
+        ret = new T_node::factor_node (
+            static_cast<token::function_token*>(current_token)->value(), 
+            lexical->get_now_loca()
+        );
         all_node.push(ret);
         match(token::function);
         match(token::left);

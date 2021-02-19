@@ -26,4 +26,19 @@
 #   define AMIC_NAMESPACE_END };
 # endif
 
+AMIC_NAMESPACE_START
+
+class AMICAL_ERROR {
+private:
+    int __error_code;
+    unsigned int __error_loca;
+public:
+    explicit AMICAL_ERROR(int code, unsigned int location = 0) :
+        __error_code(code), __error_loca(location) { }
+    inline int get_ecode() const { return __error_code; }
+    inline int get_eloca() const { return __error_loca; }
+};
+
+AMIC_NAMESPACE_END
+
 # endif

@@ -28,10 +28,11 @@ private:
     void delete_all_token();
     void error_handle();
 public:
-    Lexical_analyzer(const std::string& _str);
+    explicit Lexical_analyzer(const std::string& _str);
     ~Lexical_analyzer();
     bool pre_process();
-    void loca_error();
+    int loca_error();
+    inline int get_now_loca() const { return last_confirmed; };
 };
 
 Lexical_analyzer::Lexical_analyzer(const std::string& _str) : origin_string(_str) { 
@@ -55,17 +56,22 @@ token::token* Lexical_analyzer::get_next_token() {
         } 
     }
     // 规约以及报错
-    std::string accept_str(&origin_string[begin_loca], &origin_string[next_loca]);
-    DFS_state accept_state = current_state;
-    if (accept_state == FIRST_NUM_IN || accept_state == INT_WAIT_DIGIT) ret = new token::int_token(accept_str);
-    else if (accept_state == FLT_WAIT_DIGIT) ret = new token::float_token(accept_str);
-    else if (accept_state == ID_WAIT_ALPHA) {
-        if (is_function(accept_str)) ret = new token::function_token(accept_str);
-        else ret = new token::error_token(accept_str, begin_loca);
+    try {
+        std::string accept_str(&origin_string[begin_loca], &origin_string[next_loca]);
+        DFS_state accept_state = current_state;
+        if (accept_state == FIRST_NUM_IN || accept_state == INT_WAIT_DIGIT) ret = new token::int_token(accept_str);
+        else if (accept_state == FLT_WAIT_DIGIT) ret = new token::float_token(accept_str);
+        else if (accept_state == ID_WAIT_ALPHA) {
+            if (is_function(accept_str)) ret = new token::function_token(accept_str);
+            else ret = new token::error_token(accept_str, begin_loca);
+        }
+        else ret = new token::error_token(accept_str, begin_loca); //其他情况
+        all_token.push(ret);
+        if (ret->getTokenType() == token::error) this->error_handle();
+    } catch (const std::out_of_range& any) { 
+        std::cout << "(Ami006) Lexical error: out of range,  add \".0\" to transfer to float token\n";
+        throw AMICAL_ERROR(6, begin_loca); 
     }
-    else ret = new token::error_token(accept_str, begin_loca); //其他情况
-    all_token.push(ret);
-    if (ret->getTokenType() == token::error) this->error_handle();
     this->new_segment();
     return ret;
 }
@@ -77,7 +83,7 @@ void Lexical_analyzer::error_handle() { // 恐慌模式错误恢复
     this->loca_error();
     std::cout << "String:" << _wrong_str << "\n";
     next_loca++;
-    throw(1);
+    throw AMICAL_ERROR(1, get_now_loca());
 }
 
 char Lexical_analyzer::get_next_char() {
@@ -193,11 +199,12 @@ bool Lexical_analyzer::pre_process() {
     return error == 0;
 }
 
-void Lexical_analyzer::loca_error() {
+int Lexical_analyzer::loca_error() {
     std::cout << "\n" << origin_string << "\n";
     for (size_t i = 0; i < last_confirmed; i++) putchar(' ');
     putchar('^');
     putchar('\n');
+    return last_confirmed;
 }
 
 AMIC_NAMESPACE_END

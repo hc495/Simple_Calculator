@@ -1,3 +1,4 @@
+# pragma once
 # include "../Include/Overall.h"
 # ifndef __AMI_PREP__
 # define __AMI_PREP__
@@ -40,18 +41,18 @@ private:
         std::string now_macro;
         for (size_t i = 0; i < _str.size(); i++) {
             if (!in_macro_state) {
-                if (_str[i] == '$') {
+                if (_str[i] == '#') {
                     in_macro_state = true;
                     continue;
                 } else {
                     ret.push_back(_str[i]);
                 }
             } else {
-                if (_str[i] == '$') {
+                if (_str[i] == '#') {
                     in_macro_state = false;
                     if (!is_in_macro_table(now_macro)) {
                         std::cout << "(Ami004) Preprocesser error: undefined macro: " << now_macro << "\n";
-                        throw(4);
+                        throw AMICAL_ERROR(4, i);
                     }
                     std::string transformed_string = get_expand(now_macro);
                     now_macro.clear();
@@ -63,7 +64,7 @@ private:
         }
         if (in_macro_state) {
             std::cout << "(Ami005) Preprocesser error: unclosed macro: " << now_macro << "\n";
-            throw(5);
+            throw AMICAL_ERROR(5, _str.length() - 1);
         }
         return ret;
     }

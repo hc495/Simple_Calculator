@@ -53,7 +53,7 @@ private:
 public:
     virtual double value() = 0;
 //    virtual void print() = 0;
-    tree_node(production::non_end _nt) : node_type(_nt) { }
+    explicit tree_node(production::non_end _nt) : node_type(_nt) { }
     std::vector<tree_node*> childs;
     production::non_end get_node_type() { return node_type; }
 };
@@ -89,18 +89,18 @@ public:
 class exprright_node : public tree_node {
 public:
     char oper;
-    exprright_node(char _oper) : tree_node(production::ExprRight), oper(_oper) { }
+    explicit exprright_node(char _oper) : tree_node(production::ExprRight), oper(_oper) { }
     double value() override {
         double ret = childs[0]->value();
         if (childs.size() == 1) return ret;
-        char oper = static_cast<exprright_node*>(childs[1])->oper;
-        if (oper == '*') {
+        char __oper = static_cast<exprright_node*>(childs[1])->oper;
+        if (__oper == '*') {
             ret *= childs[1]->value();
-        } else if (oper == '/') {
+        } else if (__oper == '/') {
             ret /= childs[1]->value();
-        } else if (oper == '\\') {
+        } else if (__oper == '\\') {
             ret = static_cast<int>(ret / childs[1]->value());
-        } else if (oper == '%') {
+        } else if (__oper == '%') {
             ret = ret - static_cast<int>(ret / childs[1]->value());
         }
         return ret;
@@ -142,7 +142,7 @@ public:
         std::vector<double> right = static_cast<para_node*>(childs[1])->para_list();
         std::for_each(right.begin(), right.end(), [&ret](double temp) {
             ret.push_back(temp);
-            });
+        });
         return ret;
     }
 };
@@ -150,14 +150,23 @@ public:
 class factor_node : public tree_node {
 private:
     double(*func)(const std::vector<double>&) = 0;
+    unsigned int __loca = 0;
 public: 
     factor_node() : tree_node(production::Factor) { }
-    factor_node(double(*_func)(const std::vector<double>&)) 
-        : tree_node(production::Factor), func(_func) { }
+    explicit factor_node(double(*_func)(const std::vector<double>&), unsigned int loca) 
+        : tree_node(production::Factor), func(_func), __loca(loca) { }
     double value() override {
         if (func == 0) return childs.front()->value();
-        else return func(static_cast<para_node*>(childs[0])->para_list());
+        else {
+            try { 
+                return func(static_cast<para_node*>(childs[0])->para_list()); 
+            } catch(...) {
+                unsigned int err_loca = __loca;
+                throw AMICAL_ERROR(3, err_loca);
+            }
+        }
     }
+    unsigned int get_loca() const { return __loca; }
 };
 
 class element_node : public tree_node {
@@ -166,7 +175,7 @@ private:
     bool isDigit = false;
 public:
     element_node() : tree_node(production::Element) { }
-    element_node(double _dig) : tree_node(production::Element), digit(_dig), isDigit(true) { } 
+    explicit element_node(double _dig) : tree_node(production::Element), digit(_dig), isDigit(true) { } 
     double value() override {
         return isDigit ? digit : childs[0]->value();
     }
